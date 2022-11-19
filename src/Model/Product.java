@@ -50,14 +50,6 @@ public class Product {
     {
         return new Product(this.id,this.name,this.price);
     }
-    public void printProduct(Product product)
-    {
-        Product product1;
-        product1 = product;
 
-        System.out.print(product1.id + " ");
-        System.out.print(product1.name + " ");
-        System.out.println(product1.price);
 
-    }
 }

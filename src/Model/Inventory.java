@@ -34,16 +34,23 @@ public class Inventory {
         return null;
 
     }
-    public void printInventory()
-    {
-       for (Product i : inventory)
-       {
-           i.printProduct(i);
-       }
-    }
+
     public List<Product> returnList()
     {
         return this.inventory;
+    }
+
+    public boolean checkId(int id)
+    {
+        for (Product i : inventory)
+        {
+            if(i.getId() == id)
+            {
+                return false;
+            }
+
+        }
+        return true;
     }
 
 }

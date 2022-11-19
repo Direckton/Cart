@@ -27,20 +27,13 @@ public class Cart {
            }
        }
     }
-    public void showCart()
-    {
-        if(cart.isEmpty())
-        {
-            System.out.println("The cart is empty");
-        }
-        else {
-            for (Product i : this.cart) {
-                i.printProduct(i);
-            }
-        }
-    }
     public void clearCart()
     {
         this.cart.clear();
+    }
+
+    public List<Product> returnList()
+    {
+        return this.cart;
     }
 }
