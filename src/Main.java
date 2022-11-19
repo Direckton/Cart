@@ -1,22 +1,43 @@
+import Controller.Controller;
 import Model.Product;
-import Model.Inventory;
-import Model.Cart;
 import View.View;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.InterfaceAddress;
 import java.util.Scanner;
 
 
 public class Main {
     public static void main(String[] args) {
-        Product prod = new Product(1,"Test",1.69f);
-        Inventory inventory = new Inventory();
-        inventory.addToInventory(new Product(2,"test2",2.69f));
-        View view = new View();
-        Cart cart = new Cart();
-        view.showOptions();
-        Scanner myScan = new Scanner(System.in);
-        String selection = myScan.nextLine();
-        System.out.println(selection);
+
+        Controller controller = new Controller();
+        File file = new File("test.txt");
+        String[] products = {""};
+        Product product = new Product();
+
+
+        try {
+            Scanner fileReader = new Scanner(file);
+            while(fileReader.hasNextLine())
+            {
+                String data = fileReader.nextLine();
+                System.out.println(data);
+                products = data.split(" ");
+                int id = Integer.parseInt(products[0]);
+                String name = products[1];
+                Float price = Float.parseFloat(products[2]);
+                product = new Product(id,name,price);
+
+
+            }
+        }
+        catch (IOException e)
+        {
+
+        }
+
+
 
     }
 }
