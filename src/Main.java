@@ -1,4 +1,5 @@
 import Controller.Controller;
+import Model.Database;
 import Model.Product;
 import View.View;
 
@@ -15,10 +16,11 @@ public class Main {
         File file = new File("test.txt");
         String[] products = {""};
         Product product = new Product();
+        Database database = new Database();
 
 
         try {
-            Scanner fileReader = new Scanner(file);
+            Scanner fileReader = new Scanner(database.createFile("test2.txt"));
             while(fileReader.hasNextLine())
             {
                 String data = fileReader.nextLine();
