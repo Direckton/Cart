@@ -1,7 +1,9 @@
 import Controller.Controller;
 import Model.Database;
+import Model.Inventory;
 import Model.Product;
 import View.View;
+import com.sun.source.doctree.InlineTagTree;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,32 +15,9 @@ public class Main {
     public static void main(String[] args) {
 
         Controller controller = new Controller();
-        File file = new File("test.txt");
-        String[] products = {""};
-        Product product = new Product();
-        Database database = new Database();
-
-
-        try {
-            Scanner fileReader = new Scanner(database.createFile("test2.txt"));
-            while(fileReader.hasNextLine())
-            {
-                String data = fileReader.nextLine();
-                System.out.println(data);
-                products = data.split(" ");
-                int id = Integer.parseInt(products[0]);
-                String name = products[1];
-                Float price = Float.parseFloat(products[2]);
-                product = new Product(id,name,price);
-
-
-            }
-        }
-        catch (IOException e)
-        {
-
-        }
-
+        controller.showInventory();
+        controller.userInput();
+        controller.showCart();
 
 
     }

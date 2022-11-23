@@ -3,6 +3,7 @@ package Model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Database {
 
@@ -14,7 +15,8 @@ public class Database {
             if (file.createNewFile()) {
                 System.out.println("Created new file " + file.getName());
             } else {
-                System.out.println("File " + file.getName() + " already exists");
+                System.out.println("File " + file.getName() + " already exists, opening:");
+                file = openFile(path);
             }
             return file;
         } catch (IOException e) {
@@ -39,8 +41,27 @@ public class Database {
 
 
 
-    public void readFile(File file)
+    public Inventory readDbToInventory(File file)
     {
-
+        Inventory inventory = new Inventory();
+        String[] products = {""};
+        try {
+            Scanner fileReader = new Scanner(file);
+            while(fileReader.hasNextLine())
+            {
+                String data = fileReader.nextLine();
+                //System.out.println(data);
+                products = data.split(" ");
+                int id = Integer.parseInt(products[0]);
+                String name = products[1];
+                Float price = Float.parseFloat(products[2]);
+                inventory.addToInventory(new Product(id,name,price));
+            }
+            return inventory;
+        }
+        catch (IOException e)
+        {
+            return null;
+        }
     }
 }

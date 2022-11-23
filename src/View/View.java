@@ -15,23 +15,26 @@ public class View {
         System.out.println(product.getPrice());
 
     }
-    public void showInventory(Inventory inventory)
+    public void showInventory(List<Product> inventory)
     {
         System.out.println("Inventory:");
-        for (Product i : inventory.returnList())
+        System.out.println("ID NAME PRICE");
+        for (Product i : inventory)
         {
             printProduct(i);
         }
     }
-    public void showCart(Cart cart)
+    public void showCart(List<Product> cart)
     {
         System.out.println("Cart:");
-        if(cart.returnList().isEmpty())
+        if(cart.isEmpty())
         {
             System.out.println("The cart is empty");
         }
         else {
-            for (Product i : cart.returnList()) {
+            System.out.println("ID NAME PRICE");
+
+            for (Product i : cart) {
                 printProduct(i);
             }
         }

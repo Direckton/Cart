@@ -1,6 +1,6 @@
 package Controller;
 import Model.*;
-import View.View;
+import View.*;
 
 import java.io.File;
 import java.net.Inet4Address;
@@ -11,11 +11,14 @@ public class Controller {
     private Cart cart;
     private Inventory inventory;
     private View view;
+    private  Database database;
     public Controller()
     {
         this.view = new View();
         this.inventory = new Inventory();
         this.cart = new Cart();
+        this.database = new Database();
+        this.inventory = this.database.readDbToInventory(this.database.createFile("test.txt"));
         this.view.showOptions();
     }
     public Product insertProduct()
@@ -31,9 +34,44 @@ public class Controller {
         return new Product (id,name,price);
     }
 
-    public void importDb()
+    public void showInventory()
     {
-        File database = this.inventory.loadDBFile("Database.csv");
+        this.view.showInventory(this.inventory.returnList());
+    }
+    public void showCart()
+    {
+        this.view.showCart(this.cart.returnList());
+    }
+
+    public void userInput()
+    {
+
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
+        try
+        {
+            choice = Integer.parseInt(scanner.nextLine());
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(e);
+        }
+
+        switch (choice)
+        {
+            case 1:
+                view.showInventory(this.inventory.returnList());
+                break;
+            case 2:
+                cart.addById(this.inventory.returnList());
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
 
     }
 }
