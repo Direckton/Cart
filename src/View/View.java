@@ -47,5 +47,6 @@ public class View {
         System.out.println("3 - Show cart");
         System.out.println("4 - remove from cart");
         System.out.println("5 - Clear the cart");
+        System.out.println("9 - Exit");
     }
 }

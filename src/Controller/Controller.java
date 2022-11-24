@@ -43,7 +43,7 @@ public class Controller {
         this.view.showCart(this.cart.returnList());
     }
 
-    public void userInput()
+    public boolean userInput()
     {
 
         Scanner scanner = new Scanner(System.in);
@@ -66,12 +66,30 @@ public class Controller {
                 cart.addById(this.inventory.returnList());
                 break;
             case 3:
+                view.showCart(this.cart.returnList());
                 break;
             case 4:
+                System.out.println("Insert Id of the product you want to remove");
+                int id = 0;
+                try
+                {
+                    id = Integer.parseInt(scanner.nextLine());
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println(e);
+                }
+                this.cart.removeFromCart(id);
                 break;
             case 5:
+                this.cart.clearCart();
                 break;
+            case 9:
+                return false;
+            default:
+                System.out.println("Wrong argument, chose form one below:");
+                view.showOptions();
         }
-
+        return true;
     }
 }
