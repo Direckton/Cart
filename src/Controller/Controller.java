@@ -24,14 +24,48 @@ public class Controller {
     public Product insertProduct()
     {
         Scanner input = new Scanner(System.in);
-        System.out.println("Insert id");
-        int id = Integer.parseInt(input.nextLine());
-        System.out.println("Insert name");
-        String name = input.nextLine();
-        System.out.println("Insert price");
-        float price = Float.parseFloat(input.nextLine());
+        int id =0;
+        String name = "";
+        float price = 0;
+        try
+        {
+            System.out.println("Insert id");
+            id = Integer.parseInt(input.nextLine());
+            System.out.println("Insert name");
+            name = input.nextLine();
+            System.out.println("Insert price");
+            price = Float.parseFloat(input.nextLine());
 
-        return new Product (id,name,price);
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(e);
+        }
+        boolean idCheck= true;
+        while (idCheck)
+        {
+            if(this.inventory.checkId(id))
+            {
+                idCheck = false;
+                return new Product (id,name,price);
+
+            }
+            else
+            {
+                System.out.println("Id already taken, please insert new one");
+                try
+                {
+                    id = Integer.parseInt(input.nextLine());
+                }
+                catch (NumberFormatException e)
+                {
+                    id = 0;
+                    System.out.println(e);
+                }
+            }
+
+        }
+        return null;
     }
 
     public void showInventory()
