@@ -84,11 +84,81 @@ public class Controller {
             case 5:
                 this.cart.clearCart();
                 break;
+            case 8:
+                boolean exitAdmin = true; //controls admin loop
+                while (exitAdmin)
+                {
+                    exitAdmin = adminInput();
+                }
+                break;
             case 9:
+                //TODO
+                //add saving inventory to file
+                //?add saving cart?
                 return false;
             default:
                 System.out.println("Wrong argument, chose form one below:");
                 view.showOptions();
+        }
+        return true;
+    }
+    public boolean adminInput()
+    {
+        System.out.println("Admin console");
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
+        try
+        {
+            choice = Integer.parseInt(scanner.nextLine());
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(e);
+        }
+        switch(choice)
+        {
+            case 1:
+            this.inventory.addToInventory(insertProduct());
+            break;
+            case 2:
+                boolean loop = true;
+                String input="";
+                int id=0;
+
+                while (loop)
+                {
+                    id = 0;
+                    input = "";
+                    input = scanner.nextLine();
+                    if(input.equals("x"))
+                    {
+                        loop = false;
+                        return false;
+                    }
+                    try
+                    {
+                        id = Integer.parseInt(input);
+                    }
+                    catch(NumberFormatException e)
+                    {
+                        id = 0;
+                        System.out.println(e);
+                    }
+                    if(inventory.checkId(id))
+                    {
+                        this.inventory.removeFromInventory(id);
+                    }
+                    else
+                    {
+                        System.out.println("Wrong Id!");
+                        System.out.println("Insert Id again or press X+Enter to exit admin mode");
+                    }
+                }
+            default:
+                break;
+
+
+
         }
         return true;
     }

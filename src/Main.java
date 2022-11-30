@@ -14,13 +14,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
+
         Controller controller = new Controller();
         boolean exit = true;
         while (exit)
         {
             exit = controller.userInput();
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
 
         }
 

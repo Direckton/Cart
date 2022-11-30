@@ -45,10 +45,16 @@ public class Inventory {
 
     public boolean checkId(int id)
     {
+        if(id==0)
+        {
+            //Id cannot be 0
+            return false;
+        }
         for (Product i : inventory)
         {
             if(i.getId() == id)
             {
+                //Id cannot repeat
                 return false;
             }
 
@@ -94,6 +100,16 @@ public class Inventory {
 
         }
 
+    }
+    public void removeFromInventory(int id)
+    {
+        for(Product i : inventory)
+        {
+            if(i.getId()==id)
+            {
+                inventory.remove(i);
+            }
+        }
     }
 
 
