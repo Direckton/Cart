@@ -19,7 +19,7 @@ public class Controller {
         this.cart = new Cart();
         this.database = new Database();
         this.inventory = this.database.readDbToInventory(this.database.createFile("test.txt"));
-        this.view.showOptions();
+
     }
     public Product insertProduct()
     {
@@ -52,7 +52,7 @@ public class Controller {
             }
             else
             {
-                System.out.println("Id already taken, please insert new one");
+                System.out.println("Invalid Id, or the Id is already taken, please insert new one");
                 try
                 {
                     id = Integer.parseInt(input.nextLine());
@@ -79,7 +79,7 @@ public class Controller {
 
     public boolean userInput()
     {
-
+        this.view.showOptions();
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
         try
@@ -97,6 +97,7 @@ public class Controller {
                 view.showInventory(this.inventory.returnList());
                 break;
             case 2:
+                System.out.println("Insert Id of preferred item");
                 cart.addById(this.inventory.returnList());
                 break;
             case 3:
@@ -139,6 +140,8 @@ public class Controller {
     public boolean adminInput()
     {
         System.out.println("Admin console");
+        this.view.showAdminOptions();
+
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
         try
@@ -161,6 +164,7 @@ public class Controller {
 
                 while (loop)
                 {
+                    System.out.println("Insert Id of the item you want to remove");
                     id = 0;
                     input = "";
                     input = scanner.nextLine();
@@ -178,9 +182,10 @@ public class Controller {
                         id = 0;
                         System.out.println(e);
                     }
-                    if(inventory.checkId(id))
+                    if(!inventory.checkId(id))
                     {
                         this.inventory.removeFromInventory(id);
+                        loop = false;
                     }
                     else
                     {
@@ -188,10 +193,11 @@ public class Controller {
                         System.out.println("Insert Id again or press X+Enter to exit admin mode");
                     }
                 }
+            case 3:
+
+                break;
             default:
                 break;
-
-
 
         }
         return true;

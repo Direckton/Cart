@@ -49,6 +49,10 @@ public class Cart {
            {
                cart.remove(i);
            }
+           if(cart.isEmpty())
+           {
+               break;
+           }
        }
     }
     public void clearCart()

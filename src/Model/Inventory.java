@@ -108,6 +108,7 @@ public class Inventory {
             if(i.getId()==id)
             {
                 inventory.remove(i);
+                break;
             }
         }
     }
