@@ -9,6 +9,7 @@ public class Controller {
     private Inventory inventory;
     private View view;
     private  Database database;
+    private UserInput userInput;
 
     public Controller()
     {
@@ -17,6 +18,7 @@ public class Controller {
         this.cart = new Cart();
         this.database = new Database();
         this.inventory = this.database.readDbToInventory(this.database.createFile("test.txt"));
+        this.userInput = new UserInput();
     }
     public Product insertProduct()
     {
@@ -190,24 +192,13 @@ public class Controller {
                 break;
             case 3:
                 System.out.println("Insert Id of the item");
-                id = 0;
-                try
-                {
-                    id = Integer.parseInt(scanner.nextLine());
-                }
-                catch (NumberFormatException e)
-                {
-                    System.out.println(e);
-                }
-                if(inventory.checkId(id))
+                id = userInput.UIGetId(inventory);
                 {
                     //change item
                 }
-                else {
-                    System.out.println("Invalid Id");
-                }
-
                 break;
+            case 9:
+                return false;
             default:
                 break;
 
