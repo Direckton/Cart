@@ -1,17 +1,15 @@
 package Controller;
 import Model.*;
 import View.*;
-
-import java.io.File;
-import java.net.Inet4Address;
 import java.util.Scanner;
 
-public class Controller {
 
+public class Controller {
     private Cart cart;
     private Inventory inventory;
     private View view;
     private  Database database;
+
     public Controller()
     {
         this.view = new View();
@@ -19,12 +17,11 @@ public class Controller {
         this.cart = new Cart();
         this.database = new Database();
         this.inventory = this.database.readDbToInventory(this.database.createFile("test.txt"));
-
     }
     public Product insertProduct()
     {
         Scanner input = new Scanner(System.in);
-        int id =0;
+        int id = 0;
         String name = "";
         float price = 0;
         try
@@ -41,37 +38,34 @@ public class Controller {
         {
             System.out.println(e);
         }
-        boolean idCheck= true;
-        while (idCheck)
-        {
-            if(this.inventory.checkId(id))
-            {
-                idCheck = false;
-                return new Product (id,name,price);
 
-            }
-            else
+        while(true)
+        {
+            if (this.inventory.checkId(id))
             {
-                System.out.println("Invalid Id, or the Id is already taken, please insert new one");
-                try
-                {
-                    id = Integer.parseInt(input.nextLine());
-                }
-                catch (NumberFormatException e)
-                {
-                    id = 0;
-                    System.out.println(e);
-                }
+                return new Product(id, name, price);
             }
+
+            System.out.println("Invalid Id, or the Id is already taken, please insert new one");
+            try
+            {
+                id = Integer.parseInt(input.nextLine());
+            }
+            catch (NumberFormatException e)
+            {
+                id = 0;
+                System.err.println(e);
+            }
+
 
         }
-        return null;
     }
 
     public void showInventory()
     {
         this.view.showInventory(this.inventory.returnList());
     }
+
     public void showCart()
     {
         this.view.showCart(this.cart.returnList());
@@ -182,7 +176,7 @@ public class Controller {
                         id = 0;
                         System.out.println(e);
                     }
-                    if(!inventory.checkId(id))
+                    if (!inventory.checkId(id))
                     {
                         this.inventory.removeFromInventory(id);
                         loop = false;
@@ -193,7 +187,25 @@ public class Controller {
                         System.out.println("Insert Id again or press X+Enter to exit admin mode");
                     }
                 }
+                break;
             case 3:
+                System.out.println("Insert Id of the item");
+                id = 0;
+                try
+                {
+                    id = Integer.parseInt(scanner.nextLine());
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println(e);
+                }
+                if(inventory.checkId(id))
+                {
+                    //change item
+                }
+                else {
+                    System.out.println("Invalid Id");
+                }
 
                 break;
             default:

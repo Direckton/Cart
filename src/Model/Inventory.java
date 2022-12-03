@@ -1,12 +1,8 @@
 package Model;
-import Model.Product;
-
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
 import java.util.Scanner;
 
 public class Inventory {
@@ -75,9 +71,10 @@ public class Inventory {
             return db;
 
         }
-        catch(IOException e){
+        catch (IOException e) {
 
-    }
+        }
+
         return null;
     }
 
@@ -111,6 +108,21 @@ public class Inventory {
                 break;
             }
         }
+    }
+
+    public Product returnItem(int id)
+    {
+        for (Product i : inventory)
+        {
+            if (i.getId()==id){
+                return i;
+            }
+        }
+        return null;
+    }
+    public void changeItem(int id, String name, Float price)
+    {
+
     }
 
 
