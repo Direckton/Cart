@@ -1,6 +1,7 @@
 package Controller;
 import Model.*;
 import View.*;
+
 import java.util.Scanner;
 
 
@@ -17,7 +18,7 @@ public class Controller {
         this.inventory = new Inventory();
         this.cart = new Cart();
         this.database = new Database();
-        this.inventory = this.database.readDbToInventory(this.database.createFile("test.txt"));
+        this.inventory = this.database.readDbToInventory(this.database.createFile("test3.txt"));
         this.userInput = new UserInput();
     }
     public Product insertProduct()
@@ -28,17 +29,17 @@ public class Controller {
         float price = 0;
         try
         {
-            System.out.println("Insert id");
+            view.printMessage("Insert id");
             id = Integer.parseInt(input.nextLine());
-            System.out.println("Insert name");
+            view.printMessage("Insert name");
             name = input.nextLine();
-            System.out.println("Insert price");
+            view.printMessage("Insert price");
             price = Float.parseFloat(input.nextLine());
 
         }
         catch (NumberFormatException e)
         {
-            System.out.println(e);
+            view.printNumFormatExc(e);
         }
 
         while(true)
@@ -48,7 +49,7 @@ public class Controller {
                 return new Product(id, name, price);
             }
 
-            System.out.println("Invalid Id, or the Id is already taken, please insert new one");
+            view.printMessage("Invalid Id, or the Id is already taken, please insert new one");
             try
             {
                 id = Integer.parseInt(input.nextLine());
@@ -56,10 +57,8 @@ public class Controller {
             catch (NumberFormatException e)
             {
                 id = 0;
-                System.err.println(e);
+                view.printNumFormatExc(e);
             }
-
-
         }
     }
 
@@ -76,15 +75,13 @@ public class Controller {
     public boolean userInput()
     {
         this.view.showOptions();
-        Scanner scanner = new Scanner(System.in);
         int choice = 0;
-        try
-        {
-            choice = Integer.parseInt(scanner.nextLine());
+        try{
+            choice = userInput.UIGetChoice();
         }
-        catch (NumberFormatException e)
+        catch (Exception e)
         {
-            System.out.println(e);
+            view.printException(e);
         }
 
         switch (choice)
@@ -93,27 +90,34 @@ public class Controller {
                 view.showInventory(this.inventory.returnList());
                 break;
             case 2:
-                System.out.println("Insert Id of preferred item");
+                view.printMessage("Insert Id of preferred item");
                 cart.addById(this.inventory.returnList());
                 break;
             case 3:
                 view.showCart(this.cart.returnList());
                 break;
             case 4:
-                System.out.println("Insert Id of the product you want to remove");
+                view.printMessage("Insert Id of the product you want to remove");
                 int id = 0;
+                id = userInput.UIGetId(inventory);
                 try
                 {
-                    id = Integer.parseInt(scanner.nextLine());
+                    this.cart.removeFromCart(id);
                 }
-                catch (NumberFormatException e)
+                catch (Exception e)
                 {
-                    System.out.println(e);
+                    view.printException(e);
                 }
-                this.cart.removeFromCart(id);
                 break;
             case 5:
-                this.cart.clearCart();
+                try
+                {
+                    this.cart.clearCart();
+                }
+                catch (Exception e)
+                {
+                    view.printException(e);
+                }
                 break;
             case 8:
                 boolean exitAdmin = true; //controls admin loop
@@ -128,14 +132,14 @@ public class Controller {
                 //?add saving cart?
                 return false;
             default:
-                System.out.println("Wrong argument, chose form one below:");
-                view.showOptions();
+                //view.printMessage("Wrong argument, chose form one below:");
+                //view.showOptions();
         }
         return true;
     }
     public boolean adminInput()
     {
-        System.out.println("Admin console");
+        view.printMessage("Admin console");
         this.view.showAdminOptions();
 
         Scanner scanner = new Scanner(System.in);
@@ -146,7 +150,7 @@ public class Controller {
         }
         catch (NumberFormatException e)
         {
-            System.out.println(e);
+            view.printNumFormatExc(e);
         }
         switch(choice)
         {
@@ -160,7 +164,7 @@ public class Controller {
 
                 while (loop)
                 {
-                    System.out.println("Insert Id of the item you want to remove");
+                    view.printMessage("Insert Id of the item you want to remove");
                     id = 0;
                     input = "";
                     input = scanner.nextLine();
@@ -176,7 +180,7 @@ public class Controller {
                     catch(NumberFormatException e)
                     {
                         id = 0;
-                        System.out.println(e);
+                        view.printNumFormatExc(e);
                     }
                     if (!inventory.checkId(id))
                     {
@@ -185,13 +189,13 @@ public class Controller {
                     }
                     else
                     {
-                        System.out.println("Wrong Id!");
-                        System.out.println("Insert Id again or press X+Enter to exit admin mode");
+                        view.printMessage("Wrong ID");
+                        view.printMessage("Insert Id again or press X+Enter to exit admin mode");
                     }
                 }
                 break;
             case 3:
-                System.out.println("Insert Id of the item");
+                view.printMessage("Insert Id of the item");
                 id = userInput.UIGetId(inventory);
                 {
                     //change item

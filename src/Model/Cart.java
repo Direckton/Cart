@@ -41,22 +41,28 @@ public class Cart {
         }
     }
 
-    public void removeFromCart(int id)
+    public void removeFromCart(int id) throws Exception
     {
        for(Product i : cart)
        {
-           if(i.getId()==id)
+           try
            {
-               cart.remove(i);
+               if(i.getId()==id)
+               {
+                   cart.remove(i);
+               }
            }
-           if(cart.isEmpty())
-           {
-               break;
-           }
+            catch (Exception e)
+            {
+                throw new Exception("There is no such item in a cart!");
+            }
        }
     }
-    public void clearCart()
-    {
+    public void clearCart() throws Exception {
+        if(cart.isEmpty())
+        {
+            throw new Exception("The cart already is empty!");
+        }
         this.cart.clear();
     }
 

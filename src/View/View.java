@@ -1,15 +1,12 @@
 package View;
 
 import Model.Product;
-import Model.Cart;
-import Model.Inventory;
 
 import java.util.List;
 
 public class View {
     public void printProduct(Product product)
     {
-
         System.out.print(product.getId()+ " ");
         System.out.print(product.getName()+ " ");
         System.out.println(product.getPrice());
@@ -63,5 +60,17 @@ public class View {
         System.out.println("3 - Change existing item");
         System.out.println("4 - Change amount in inventory");
         System.out.println("9 - Exit");
+    }
+    public void printMessage(String message)
+    {
+        System.out.println(message);
+    }
+    public void printNumFormatExc(NumberFormatException e)
+    {
+        System.err.println(e);
+    }
+    public void printException(Exception e)
+    {
+        System.err.println(e);
     }
 }
