@@ -15,8 +15,7 @@ public class Inventory {
     /**
      * Default constructor. Initializes storage container ad ArrayList.
      */
-    public Inventory()
-    {
+    public Inventory() {
         inventory = new ArrayList<>();
     }
 
@@ -44,11 +43,21 @@ public class Inventory {
         }
         return null;
     }
+
+    /**
+     * Used to get whole list of inventory
+     * @return Inventory List
+     */
     public List<Product> returnList()
     {
         return this.inventory;
     }
 
+    /**
+     * Checks if given id already exist in the system
+     * @param id id being checked
+     * @return boolean representing if such id was found (true == found , else == false)
+     */
     public boolean checkExistingId(int id)
     {
         if(id==0)
@@ -68,65 +77,30 @@ public class Inventory {
         return false;
     }
 
+    /**
+     * Checks whether given id is valid (not occupied or 0)
+     * @param id id being checked
+     * @return boolean (true == id is free to use, else == false)
+     */
     public boolean checkValidId(int id)
     {
-        if(id==0)
-        {
+        if(id==0) {
             //Id cannot be 0
             return false;
         }
-        for (Product i : inventory)
-        {
-            if(i.getId() == id)
-            {
+        for (Product i : inventory) {
+            if(i.getId() == id) {
                 //Id cannot repeat
                 return false;
             }
-
         }
         return true;
     }
 
-    public File loadDBFile(String path)
-    {
-        try {
-            File db = new File(path);
-            if(db.createNewFile()){
-                System.out.println("File created " + db.getName());
-            }
-            else{
-                System.out.println("File " + db.getName() + " already exists!");
-            }
-            return db;
-
-        }
-        catch (IOException e) {
-
-        }
-
-        return null;
-    }
-
-    public void convertToCsv(File file)
-    {
-        try{
-            if(file.isFile())
-            {
-                Scanner reader = new Scanner(file);
-                while(reader.hasNextLine())
-                {
-                    String data = reader.nextLine();
-                    data.split(" ");
-                }
-            }
-
-        }
-        catch(IOException e)
-        {
-
-        }
-
-    }
+    /**
+     * Iterates through inventory in search of given id and deletes whole object
+     * @param id id of the product being deleted
+     */
     public void removeFromInventory(int id)
     {
         for(Product i : inventory)
@@ -139,6 +113,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * Returns whole object of given id
+     * @param id id of the object
+     * @return 'Product' object
+     */
     public Product returnItem(int id)
     {
         for (Product i : inventory)
@@ -149,6 +128,13 @@ public class Inventory {
         }
         return null;
     }
+
+    /**
+     * Implements possibility to change existing item by replacing it with new one.
+     * After the operation array is sorted
+     * @param oldProd Product that will be removed
+     * @param newProd Product that will replace it
+     */
     public void changeItem(Product oldProd, Product newProd)
     {
         this.removeFromInventory(oldProd.getId());
@@ -161,6 +147,12 @@ public class Inventory {
 
 class SortById implements Comparator<Product>
 {
+    /**
+     * sorting algorithm used to determine whether id is greater than the next one.
+     * @param p1 the first object to be compared.
+     * @param p2 the second object to be compared.
+     * @return input of sort algorithm.
+     */
     public int compare(Product p1, Product p2)
     {
         if(p1.getId()>p2.getId()){

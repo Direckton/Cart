@@ -10,18 +10,17 @@ import java.io.IOException;
 import java.net.InterfaceAddress;
 import java.util.Scanner;
 
-
+/**
+ * This is an E-cart, program for shopping online.
+ */
 public class Main {
     public static void main(String[] args) {
 
-
         Controller controller = new Controller();
         boolean exit = true;
-        while (exit)
+        while (exit) //main program loop
         {
             exit = controller.userInput();
-
         }
-
     }
 }

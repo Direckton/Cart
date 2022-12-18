@@ -16,14 +16,20 @@ public class Database {
         view = new View();
     }
 
+    /**
+     * Creates file of specified name or opens it if it already exists.
+     * @param path path of the file
+     * @return file
+     * @throws IOException
+     */
     public File createFile(String path) throws IOException
     {
         try {
             File file = new File(path);
             if (file.createNewFile()) {
-                System.out.println("Created new file " + file.getName());
+                view.printMessage("Created new file " + file.getName());
             } else {
-                System.out.println("File " + file.getName() + " already exists, opening:");
+                view.printMessage("File " + file.getName() + " already exists, opening:");
                 file = openFile(path);
             }
             return file;
@@ -33,6 +39,12 @@ public class Database {
         }
     }
 
+    /**
+     * Opens and returns existing file
+     * @param path path to the file
+     * @return file or null if the file doesn't exist
+     * @throws IOException
+     */
     public File openFile(String path) throws IOException
     {
         try {
@@ -51,6 +63,11 @@ public class Database {
 
     }
 
+    /**
+     * Loads contents of the file to inventory
+     * @param file opened file
+     * @return inventory object
+     */
     public Inventory readDbToInventory(File file)
     {
         Inventory inventory = new Inventory();
@@ -75,6 +92,11 @@ public class Database {
         }
     }
 
+    /**
+     * Writes inventory back to file
+     * @param inventory current inventory, edited or not
+     * @param path path of the file
+     */
     public void writeInventoryToDb(List<Product> inventory, String path)
     {
         try {
@@ -85,7 +107,7 @@ public class Database {
                 writer.write(i.getId() + " " + i.getName() + " " + i.getPrice() + "\n");
             }
             writer.close();
-            System.out.println("Successfully wrote to the file.");
+            view.printMessage("Successfully wrote to the file.");
         } catch (IOException e) {
             view.printMessage("An error occurred.");
             e.printStackTrace();

@@ -7,17 +7,28 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.StreamSupport;
 
+/**
+ * Class stores user's cart items
+ */
 public class Cart {
-    private List<Product> cart = new ArrayList<>();
+    private List<Product> cart;
 
     public Cart() {
-        cart.clear();
+        cart = new ArrayList<>();
     }
 
+    /**
+     * Adds product to the cart array
+     * @param product object of a product
+     */
     public void addToCart(Product product) {
         this.cart.add(product);
     }
-
+    /**
+     * Adds product to the cart array by the product's id
+     * @param inventory inventory list
+     * @param id id of the inventory product
+     */
     public void addById(List<Product> inventory, int id) {
         for (Product i : inventory) {
             if (i.getId() == id) {
@@ -27,6 +38,11 @@ public class Cart {
         }
     }
 
+    /**
+     * Removes product of given id from cart
+     * @param id id of desired product to be removed
+     * @throws Exception product of given id is not in cart
+     */
     public void removeFromCart(int id) throws Exception {
         for (Product i : cart) {
 
@@ -41,7 +57,10 @@ public class Cart {
         throw new Exception("There is no such item in a cart!");
     }
 
-
+    /**
+     * Removes all products from the cart
+     * @throws Exception cart is empty
+     */
     public void clearCart() throws Exception {
         if (cart.isEmpty()) {
             throw new Exception("The cart already is empty!");
@@ -49,6 +68,10 @@ public class Cart {
         this.cart.clear();
     }
 
+    /**
+     * Gets list of the products
+     * @return array of products in the cart
+     */
     public List<Product> returnList() {
         return this.cart;
     }

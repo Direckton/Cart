@@ -14,6 +14,9 @@ public class Controller {
     private  Database database;
     private UserInput userInput;
 
+    /**
+     * Default constructor initializes all private items and parses necessary arguments
+     */
     public Controller()
     {
         this.view = new View();
@@ -29,6 +32,13 @@ public class Controller {
         }
         this.userInput = new UserInput(this.view);
     }
+
+    /**
+     * Provides initial data of the 'Product' object that will be processed further.
+     * Id is checked for an integer and price for float
+     * @return new object of 'Product' type
+     * @throws Exception wrong numeric format for id and price
+     */
     private Product insertProduct() throws Exception
     {
         Scanner input = new Scanner(System.in);
@@ -56,6 +66,11 @@ public class Controller {
         return new Product(id,name,price);
     }
 
+    /**
+     * Performs necessary checks for object to be added to inventory
+     * @return valid object
+     * @throws Exception initial product creation was invalid
+     */
     public Product validateForInventory() throws Exception
     {
         Product product = new Product();
@@ -77,16 +92,23 @@ public class Controller {
             view.printMessage("The Id is already taken, please insert new one");
             try
             {
+                //get correct id
                  product.setId(userInput.UIGetNewId(inventory));
             }
             catch (NumberFormatException e)
             {
+                //in case id is invalid set it to 0, will be ignored
                 id = 0;
                 view.printNumFormatExc(e);
             }
         }
     }
 
+    /**
+     * Performs checks necessary for changing product data, existing id is allowed
+     * @param oldId existing id
+     * @return 'Product' object
+     */
     public Product validateForChange(int oldId)
     {
         Product product = new Product();
@@ -109,22 +131,17 @@ public class Controller {
 
     }
 
-    public void showInventory()
-    {
-        this.view.showInventory(this.inventory.returnList());
-    }
-
-    public void showCart()
-    {
-        this.view.showCart(this.cart.returnList());
-    }
-
+    /**
+     * Main methode switching logic of different program functions.
+     * Uses switch statement for controlling user selection and calls corresponding methods.
+     * @return boolean value used to control while loop
+     */
     public boolean userInput()
     {
-        this.view.showOptions();
+        this.view.showOptions(); //show available choices to the user
         int choice = 0;
         try{
-            choice = userInput.UIGetChoice();
+            choice = userInput.UIGetChoice(); //gets user choice from io stream
         }
         catch (Exception e)
         {
@@ -133,48 +150,44 @@ public class Controller {
 
         switch (choice)
         {
-            case 1:
+            case 1: //show inventory
                 view.showInventory(this.inventory.returnList());
                 break;
-            case 2:
+            case 2: //add product to cart
                 view.showInventory(this.inventory.returnList());
                 view.printMessage("Insert Id of preferred item");
                 cart.addById(this.inventory.returnList(), userInput.UIGetExistingId(this.inventory));
                 break;
-            case 3:
+            case 3: //show cart
                 view.showCart(this.cart.returnList());
                 break;
-            case 4:
+            case 4: //remove item from cart (by id)
                 view.printMessage("Insert Id of the product you want to remove");
                 int id = 0;
                 id = userInput.UIGetExistingId(inventory);
-                try
-                {
+                try {
                     this.cart.removeFromCart(id);
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     view.printException(e);
                 }
                 break;
-            case 5:
-                try
-                {
+            case 5: //remove everything from the cart
+                try {
                     this.cart.clearCart();
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     view.printException(e);
                 }
                 break;
-            case 8:
+            case 8: //enter admin mode
                 boolean exitAdmin = true; //controls admin loop
                 while (exitAdmin)
                 {
                     exitAdmin = adminInput();
                 }
                 break;
-            case 9:
+            case 9: // save changes to the inventory and exit the program
                 //TODO
                 //add saving inventory to file
                 database.writeInventoryToDb(inventory.returnList(), "test.txt");
@@ -186,6 +199,11 @@ public class Controller {
         }
         return true;
     }
+
+    /**
+     * Method for switching admin controls and responsible for calling more advanced methods
+     * @return boolean value used to control while loop
+     */
     public boolean adminInput()
     {
         view.printMessage("Admin console");
@@ -225,14 +243,11 @@ public class Controller {
                 //add to inventory
                 //sort by id
                 inventory.changeItem(oldProd,newProd);
-
-
                 break;
             case 9:
                 return false;
             default:
                 break;
-
         }
         return true;
     }

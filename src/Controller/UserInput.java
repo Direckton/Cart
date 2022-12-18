@@ -10,13 +10,17 @@ import java.util.Scanner;
 
 public class UserInput {
     Scanner scanner = new Scanner(System.in);
-
     View view;
 
     UserInput(View parseView){
         view = parseView;
     }
 
+    /**
+     * Gets and checks choice selected by user
+     * @return chioce int
+     * @throws Exception incorrect input error
+     */
     public int UIGetChoice() throws Exception
     {
         int choice = 0;
@@ -30,6 +34,11 @@ public class UserInput {
         return choice;
     }
 
+    /**
+     * Gets and checks existing id selected by user
+     * @param inventory reference inventory of products
+     * @return existing id
+     */
     public int UIGetExistingId(Inventory inventory)
     {
         int id=0;
@@ -54,6 +63,11 @@ public class UserInput {
             }
         }
     }
+    /**
+     * Gets and checks valid id selected by user
+     * @param inventory reference inventory of products
+     * @return valid id
+     */
     public int UIGetNewId(Inventory inventory)
     {
         int id=0;
