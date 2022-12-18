@@ -12,6 +12,9 @@ import java.util.Scanner;
 
 /**
  * This is an E-cart, program for shopping online.
+ * @author Michał Buczak
+ * @version 1.0
+ * 
  */
 public class Main {
     public static void main(String[] args) {
