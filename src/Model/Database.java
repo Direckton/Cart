@@ -1,15 +1,23 @@
 package Model;
 
 
+import View.View;
+
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Database {
 
-    public Database(){}
+    private View view;
+    public Database(){
+        view = new View();
+    }
 
-    public File createFile(String path) {
+    public File createFile(String path) throws IOException
+    {
         try {
             File file = new File(path);
             if (file.createNewFile()) {
@@ -19,27 +27,29 @@ public class Database {
                 file = openFile(path);
             }
             return file;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-
+        }
+        catch (IOException e) {
+            throw new IOException(e);
         }
     }
 
-    public File openFile(String path)
+    public File openFile(String path) throws IOException
     {
+        try {
+            File file = new File(path);
 
-        File file = new File(path);
-        if(file.isFile())
-        {
-            return file;
+            if (file.isFile()) {
+                return file;
+            } else {
+                return null;
+            }
         }
-        else{
-            return null;
+        catch (Exception e)
+        {
+            throw new IOException(e);
         }
 
     }
-
-
 
     public Inventory readDbToInventory(File file)
     {
@@ -62,6 +72,23 @@ public class Database {
         catch (IOException e)
         {
             return null;
+        }
+    }
+
+    public void writeInventoryToDb(List<Product> inventory, String path)
+    {
+        try {
+            FileWriter writer = new FileWriter(path);
+
+            for (Product i : inventory)
+            {
+                writer.write(i.getId() + " " + i.getName() + " " + i.getPrice() + "\n");
+            }
+            writer.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            view.printMessage("An error occurred.");
+            e.printStackTrace();
         }
     }
 }

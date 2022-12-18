@@ -9,7 +9,7 @@ public class View {
     {
         System.out.print(product.getId()+ " ");
         System.out.print(product.getName()+ " ");
-        System.out.println(product.getPrice());
+        System.out.printf("%.2f \n",product.getPrice());
 
     }
     public void showInventory(List<Product> inventory)

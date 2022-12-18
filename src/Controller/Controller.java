@@ -2,6 +2,8 @@ package Controller;
 import Model.*;
 import View.*;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
 
@@ -18,41 +20,64 @@ public class Controller {
         this.inventory = new Inventory();
         this.cart = new Cart();
         this.database = new Database();
-        this.inventory = this.database.readDbToInventory(this.database.createFile("test3.txt"));
-        this.userInput = new UserInput();
+        try {
+            this.inventory = this.database.readDbToInventory(this.database.createFile("test.txt"));
+        }
+        catch (IOException e)
+        {
+            view.printException(e);
+        }
+        this.userInput = new UserInput(this.view);
     }
-    public Product insertProduct()
+    private Product insertProduct() throws Exception
     {
         Scanner input = new Scanner(System.in);
         int id = 0;
         String name = "";
         float price = 0;
-        try
-        {
+        try {
             view.printMessage("Insert id");
             id = Integer.parseInt(input.nextLine());
-            view.printMessage("Insert name");
-            name = input.nextLine();
+        }
+        catch (NumberFormatException e) {
+            throw new Exception("Wrong ID! Make sure it's a positive integer (not a 0).");
+        }
+        view.printMessage("Insert name");
+        name = input.nextLine();
+        String priceString = "";
+        try {
             view.printMessage("Insert price");
-            price = Float.parseFloat(input.nextLine());
-
+            priceString = input.nextLine();
+            price = Float.parseFloat(priceString);
         }
-        catch (NumberFormatException e)
-        {
-            view.printNumFormatExc(e);
+        catch (NumberFormatException e) {
+            throw new Exception("Wrong price \"" + priceString + "\"! Make sure it's a number");
         }
+        return new Product(id,name,price);
+    }
 
+    public Product validateForInventory() throws Exception
+    {
+        Product product = new Product();
+        try{
+            product = insertProduct();
+        }
+        catch (Exception e) {
+            view.printException(e);
+            throw new Exception("Try adding product again");
+        }
+        int id = 0;
         while(true)
         {
-            if (this.inventory.checkId(id))
+            if (this.inventory.checkValidId(product.getId()))
             {
-                return new Product(id, name, price);
+                return new Product(product.getId(), product.getName(), product.getPrice());
             }
 
-            view.printMessage("Invalid Id, or the Id is already taken, please insert new one");
+            view.printMessage("The Id is already taken, please insert new one");
             try
             {
-                id = Integer.parseInt(input.nextLine());
+                 product.setId(userInput.UIGetNewId(inventory));
             }
             catch (NumberFormatException e)
             {
@@ -60,6 +85,28 @@ public class Controller {
                 view.printNumFormatExc(e);
             }
         }
+    }
+
+    public Product validateForChange(int oldId)
+    {
+        Product product = new Product();
+        try{
+            product = insertProduct();
+        }
+        catch (Exception e) {
+            view.printException(e);
+        }
+        if(oldId== product.getId()){
+            return new Product(product.getId(), product.getName(), product.getPrice());
+        }
+        if(inventory.checkValidId(product.getId()))
+        {
+            return new Product(product.getId(), product.getName(), product.getPrice());
+        }
+        else {
+            return new Product(userInput.UIGetNewId(inventory), product.getName(), product.getPrice());
+        }
+
     }
 
     public void showInventory()
@@ -90,8 +137,9 @@ public class Controller {
                 view.showInventory(this.inventory.returnList());
                 break;
             case 2:
+                view.showInventory(this.inventory.returnList());
                 view.printMessage("Insert Id of preferred item");
-                cart.addById(this.inventory.returnList());
+                cart.addById(this.inventory.returnList(), userInput.UIGetExistingId(this.inventory));
                 break;
             case 3:
                 view.showCart(this.cart.returnList());
@@ -99,7 +147,7 @@ public class Controller {
             case 4:
                 view.printMessage("Insert Id of the product you want to remove");
                 int id = 0;
-                id = userInput.UIGetId(inventory);
+                id = userInput.UIGetExistingId(inventory);
                 try
                 {
                     this.cart.removeFromCart(id);
@@ -129,7 +177,8 @@ public class Controller {
             case 9:
                 //TODO
                 //add saving inventory to file
-                //?add saving cart?
+                database.writeInventoryToDb(inventory.returnList(), "test.txt");
+
                 return false;
             default:
                 //view.printMessage("Wrong argument, chose form one below:");
@@ -141,65 +190,43 @@ public class Controller {
     {
         view.printMessage("Admin console");
         this.view.showAdminOptions();
-
-        Scanner scanner = new Scanner(System.in);
         int choice = 0;
-        try
-        {
-            choice = Integer.parseInt(scanner.nextLine());
+        try {
+            choice = userInput.UIGetChoice();
         }
-        catch (NumberFormatException e)
+        catch (Exception e)
         {
-            view.printNumFormatExc(e);
+            view.printException(e);
         }
         switch(choice)
         {
-            case 1:
-            this.inventory.addToInventory(insertProduct());
+            case 1: //Add item to inventory
+                try{
+                    this.inventory.addToInventory(validateForInventory());
+                }
+                catch (Exception e){
+                    view.printException(e);
+                }
             break;
-            case 2:
-                boolean loop = true;
-                String input="";
+            case 2: //Remove item form inventory
                 int id=0;
+                view.printMessage("Insert Id of the item you want to remove");
+                id = 0;
+                id = userInput.UIGetExistingId(inventory);
+                this.inventory.removeFromInventory(id);
+            break;
+            case 3: //Change existing item
+                view.printMessage("Insert Id of the item, you'd like to change");
+                id = userInput.UIGetExistingId(inventory);
+                Product oldProd = inventory.getProduct(id);
+                //insert new product
+                Product newProd = validateForChange(id);
+                //compare in change product
+                //add to inventory
+                //sort by id
+                inventory.changeItem(oldProd,newProd);
 
-                while (loop)
-                {
-                    view.printMessage("Insert Id of the item you want to remove");
-                    id = 0;
-                    input = "";
-                    input = scanner.nextLine();
-                    if(input.equals("x"))
-                    {
-                        loop = false;
-                        return false;
-                    }
-                    try
-                    {
-                        id = Integer.parseInt(input);
-                    }
-                    catch(NumberFormatException e)
-                    {
-                        id = 0;
-                        view.printNumFormatExc(e);
-                    }
-                    if (!inventory.checkId(id))
-                    {
-                        this.inventory.removeFromInventory(id);
-                        loop = false;
-                    }
-                    else
-                    {
-                        view.printMessage("Wrong ID");
-                        view.printMessage("Insert Id again or press X+Enter to exit admin mode");
-                    }
-                }
-                break;
-            case 3:
-                view.printMessage("Insert Id of the item");
-                id = userInput.UIGetId(inventory);
-                {
-                    //change item
-                }
+
                 break;
             case 9:
                 return false;
