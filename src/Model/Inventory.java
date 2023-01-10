@@ -82,18 +82,23 @@ public class Inventory {
      * @param id id being checked
      * @return boolean (true == id is free to use, else == false)
      */
-    public boolean checkValidId(int id)
+    public boolean checkValidId(int... id)
     {
-        if(id==0) {
-            //Id cannot be 0
-            return false;
-        }
-        for (Product i : inventory) {
-            if(i.getId() == id) {
-                //Id cannot repeat
+        for(int z : id)
+        {
+                if(z==0) {
+                //Id cannot be 0
                 return false;
             }
+
+            for (Product i : inventory) {
+                if(i.getId() == z) {
+                    //Id cannot repeat
+                    return false;
+                }
+            }
         }
+
         return true;
     }
 
