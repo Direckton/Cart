@@ -40,10 +40,12 @@ class CartTest {
     void addByIdTest()
     {
         Inventory inventory = new Inventory();
-        Product p1 = new Product(1,"test",2.3f);
+        Product p1 = new Product(1,"test",2.1f);
         inventory.addToInventory(p1);
         cart.addById(inventory.returnList(),1);
-        assertSame(cart.returnList().get(0),p1);
+        assertEquals(cart.returnList().get(0).getId(),p1.getId());
+        assertEquals(cart.returnList().get(0).getName(),p1.getName());
+        assertEquals(cart.returnList().get(0).getPrice(),p1.getPrice());
     }
 
     @Test
@@ -60,13 +62,29 @@ class CartTest {
         Product p3 = new Product(3,"test3",4.1f);
         removed.add(p1);
         removed.add(p3);
-        assertEquals(cart.returnList(),removed);
+        for(int i =0;i< removed.size();i++)
+        {
+            Product expected = removed.get(i);
+            Product actual = cart.returnList().get(i);
+            assertEquals(expected.getId(),actual.getId());
+            assertEquals(expected.getName(),actual.getName());
+            assertEquals(expected.getPrice(),actual.getPrice());
+        }
 
     }
 
     @Test
     void clearCartTest()
     {
+        try{
+            cart.clearCart();
+        }catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        assertTrue(cart.returnList().isEmpty());
+
+
 
     }
 }

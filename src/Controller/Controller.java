@@ -24,7 +24,7 @@ public class Controller {
         this.cart = new Cart();
         this.database = new Database();
         try {
-            this.inventory = this.database.readDbToInventory(this.database.createFile("test.txt"));
+            this.inventory = this.database.readDbToInventory(this.database.createFile("inventory.txt"));
         }
         catch (IOException e)
         {

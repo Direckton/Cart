@@ -1,5 +1,4 @@
-1 apple 1.6
-2 banana 2.0
-3 pear 2.4
-4 tomato 3.2
-5 carrot 1.54
+1 test 1.1
+2 test2 2.2
+3 test3 3.3
+4 test4 4.4
